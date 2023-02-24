@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { FoodData } from "./search";
+import { Ingredient } from "../App";
+import { IngredientSummary } from "./search";
 
 type IngredientsProps = {
-  ingredients: FoodData[];
-  onRemove: (item: FoodData) => void;
+  ingredients: Ingredient[];
+  onRemove: (item: Ingredient) => void;
   className?: string;
 };
-
-type FoodItem = FoodData & { selected: boolean };
 
 const Ingredients: React.FC<IngredientsProps> = ({
   ingredients,
@@ -21,7 +20,7 @@ const Ingredients: React.FC<IngredientsProps> = ({
     >
       {ingredients.map((ingredient) => (
         <li
-          key={`${ingredient.food_name}${ingredient.tag_id}`}
+          key={`${ingredient.food_name}`}
           className="w-full flex border-b-2  hover:bg-orange-50 active:bg-orange-100"
         >
           <img
@@ -38,9 +37,9 @@ const Ingredients: React.FC<IngredientsProps> = ({
             <p className="text-gray-600 text-sm mb-2">
               {ingredient.serving_qty} {ingredient.serving_unit}
             </p>
-            <p className="text-gray-600 text-sm">
+            {/* <p className="text-gray-600 text-sm">
               <span className="font-bold">Tag:</span> {ingredient.tag_name}
-            </p>
+            </p> */}
           </div>
           <button
             onClick={() => onRemove(ingredient)}

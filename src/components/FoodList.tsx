@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { FoodData } from "./search";
+import { IngredientSummary } from "./search";
 
 type FoodListProps = {
-  foodList: FoodData[];
-  onAdd: (item: FoodData) => void;
+  foodList: IngredientSummary[];
+  onAdd: (item: IngredientSummary) => void;
   className?: string;
 };
 
-type FoodItem = FoodData & { selected: boolean };
+type FoodItem = IngredientSummary & { selected: boolean };
 
 const FoodList: React.FC<FoodListProps> = ({ foodList, className, onAdd }) => {
   return (

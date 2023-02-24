@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { debounce } from "../common/util";
 import FoodList from "./FoodList";
 
-export interface FoodData {
+export interface IngredientSummary {
   food_name: string;
   serving_unit: string;
   tag_name: string;
@@ -16,13 +16,13 @@ export interface FoodData {
 }
 
 interface SearchProps {
-  onAdd: (item: FoodData) => void;
+  onAdd: (item: IngredientSummary) => void;
   //   onRemove: (item: FoodData) => void;
 }
 
-const Search: React.FC<SearchProps> = ({ onAdd, onRemove }) => {
+const Search: React.FC<SearchProps> = ({ onAdd }) => {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<FoodData[]>([]);
+  const [results, setResults] = useState<IngredientSummary[]>([]);
 
   const handleSearch = async () => {
     if (!query) {
