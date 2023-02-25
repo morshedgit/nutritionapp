@@ -1,62 +1,23 @@
-import React, { createContext, ReactNode, useMemo, useState } from "react";
-import Ingredients from "./Ingredients";
-import NutrientsDisplay, { Nutrients } from "./Nutrients";
-import Search, { IngredientSummary } from "./Search";
-type Serving = {
-  serving_weight: number;
-  measure: string;
-  seq: number;
-  qty: number;
-};
-type Tag = {
-  item: string;
-  measure: null;
-  quantity: string;
-  food_group: number;
-  tag_id: number;
-};
-
-type Attribute = {
-  attr_id: number;
-  value: number;
-};
-type Photo = {
-  thumb: string;
-  highres: string;
-  is_user_uploaded: boolean;
-};
-
-export type Ingredient = {
-  food_name: string;
-  brand_name: string | null;
-  serving_qty: number;
-  serving_unit: string;
-  serving_weight_grams: number;
-  nf_calories: number;
-  nf_total_fat: number;
-  nf_saturated_fat: number;
-  nf_cholesterol: number;
-  nf_sodium: number;
-  nf_total_carbohydrate: number;
-  nf_dietary_fiber: number;
-  nf_sugars: number;
-  nf_protein: number;
-  nf_potassium: number;
-  nf_p: number;
-  full_nutrients: Attribute[];
-  tags: Tag;
-  alt_measures: Serving[];
-  photo: Photo;
-};
+import React, {
+  createContext,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import useSearchParams from "../hooks/useSearchParams";
+import { Ingredient, IngredientSummary, Nutrients } from "../types";
 
 export const IngredientContext = createContext<{
   ingredients: Ingredient[];
   removeIngredient: (ingredient: Ingredient) => void;
+  updateIngredient: (ingredient: Ingredient) => void;
   addIngredient: (ingredientSummaries: IngredientSummary[]) => void;
   totalMealNutrientCount: Nutrients;
 }>({
   ingredients: [],
   removeIngredient: () => {},
+  updateIngredient: () => {},
   addIngredient: () => {},
   totalMealNutrientCount: {
     nf_calories: 0,
@@ -81,24 +42,62 @@ type IngredientProviderProps = {
 const IngredientProvider: React.FC<IngredientProviderProps> = (props) => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 
+  // const [
+  //   searchParams,
+  //   setFoodItems,
+  //   removeFoodByName,
+  //   updateFoodByName,
+  //   addFoodItem,
+  // ] = useSearchParams();
+
+  // useEffect(() => {
+  //   console.log(searchParams);
+  //   // handleAddIngredients(searchParams);
+  // }, [searchParams]);
+
   const handleRemoveIngredient = (ingredient: Ingredient) => {
     setIngredients((preIng) =>
       preIng.filter((ing) => ing.food_name !== ingredient.food_name)
     );
+    // removeFoodByName(ingredient.food_name);
+  };
+  const handleUpdateIngredient = (ingredient: Ingredient) => {
+    setIngredients((preIng) =>
+      preIng.map((ing) => {
+        if (ing.food_name !== ingredient.food_name) return ing;
+        return ingredient;
+      })
+    );
+    // updateFoodByName(ingredient.food_name, {
+    //   food_name: ingredient.food_name,
+    //   selected_qty: ingredient.selectedQty,
+    //   selected_unit: ingredient.selectedUnit,
+    // });
   };
 
-  const handleAddIngredient = (ingredientSummaries: IngredientSummary[]) => {
+  const handleAddIngredients = <T extends { food_name: string }>(
+    ingredientSummaries: T[]
+  ) => {
     ingredientSummaries.forEach((ingredientSummary) =>
-      addIngredients(ingredientSummary)
+      addIngredient(ingredientSummary)
     );
   };
 
-  const addIngredients = async (ingredientSummary: IngredientSummary) => {
+  const addIngredient = async <T extends { food_name: string }>(
+    ingredientSummary: T
+  ) => {
     const ingredient = ingredientCache.get(ingredientSummary.food_name);
     if (ingredient) {
+      ingredient.selectedQty = ingredient.serving_qty;
+      ingredient.selectedUnit = ingredient.serving_unit;
       setIngredients((preIngredients) => [
         ...new Set([...preIngredients, ingredient]),
       ]);
+      // addFoodItem({
+      //   food_name: ingredient.food_name,
+      //   selected_qty: ingredient.selectedQty,
+      //   selected_unit: ingredient.selectedUnit,
+      // });
       return;
     }
 
@@ -126,7 +125,17 @@ const IngredientProvider: React.FC<IngredientProviderProps> = (props) => {
       ) as Ingredient;
       if (!ingredient) return;
       ingredientCache.set(ingredient.food_name, ingredient);
-      setIngredients((preIngredients) => [...preIngredients, ingredient]);
+      ingredient.selectedQty = ingredient.serving_qty;
+      ingredient.selectedUnit = ingredient.serving_unit;
+      setIngredients((preIngredients) => [
+        ...new Set([...preIngredients, ingredient]),
+      ]);
+
+      // addFoodItem({
+      //   food_name: ingredient.food_name,
+      //   selected_qty: ingredient.selectedQty,
+      //   selected_unit: ingredient.selectedUnit,
+      // });
     } catch (error) {
       console.error("Error fetching search results:", error);
     }
@@ -136,7 +145,17 @@ const IngredientProvider: React.FC<IngredientProviderProps> = (props) => {
     const totalNutrients = ingredients.reduce<Nutrients>(
       (total, cur) => {
         const keys = Object.keys(total) as Array<keyof Nutrients>;
-        keys.forEach((nutrient) => (total[nutrient] += cur[nutrient]));
+        keys.forEach((nutrient) => {
+          const measure = cur.alt_measures.find(
+            (measure) => measure.measure === cur.selectedUnit
+          );
+          if (!measure) return total;
+
+          const servingPerQty = measure.serving_weight / measure.qty;
+          const ratio =
+            (cur.selectedQty * servingPerQty) / cur.serving_weight_grams;
+          return (total[nutrient] += cur[nutrient] * ratio);
+        });
         return total;
       },
       {
@@ -158,7 +177,8 @@ const IngredientProvider: React.FC<IngredientProviderProps> = (props) => {
   const value = {
     ingredients,
     removeIngredient: handleRemoveIngredient,
-    addIngredient: handleAddIngredient,
+    updateIngredient: handleUpdateIngredient,
+    addIngredient: handleAddIngredients,
     totalMealNutrientCount,
   };
 

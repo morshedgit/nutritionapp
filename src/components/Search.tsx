@@ -1,87 +1,56 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import useDebounce from "../hooks/useDebounce";
+import { useContext } from "react";
+import useSearch from "../hooks/useSearch";
+import { IngredientSummary } from "../types";
 import { IngredientContext } from "./IngredientProvider";
 import FoodList from "./SearchResult";
-
-export interface IngredientSummary {
-  food_name: string;
-  serving_unit: string;
-  tag_name: string;
-  serving_qty: number;
-  common_type: null;
-  tag_id: string;
-  photo: {
-    thumb: string;
-  };
-  locale: string;
-}
 
 interface SearchProps {}
 
 const Search: React.FC<SearchProps> = (props) => {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState<IngredientSummary[]>([]);
-  const controllerRef = useRef<AbortController | undefined>();
   const { addIngredient } = useContext(IngredientContext);
+  const { results, searching, error, query, onQuery, resetSearch } =
+    useSearch();
 
-  const handleSearch = async () => {
-    if (!debouncedQuery) {
-      setResults([]);
-      return;
-    }
-
-    const controller = new AbortController();
-    const signal = controller.signal;
-    controllerRef.current = controller;
-
-    try {
-      const response = await fetch(
-        `https://trackapi.nutritionix.com/v2/search/instant?query=${debouncedQuery}`,
-        {
-          headers: {
-            "x-app-id": "9aa2f7ac",
-            "x-app-key": "b75ff2973f91f1f6521c6d863bfb8a84",
-            "x-remote-user-id": "0",
-          },
-          signal,
-        }
-      );
-      const data = await response.json();
-      setResults(data.common);
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-    }
-  };
-  const debouncedQuery = useDebounce(query, 0);
-  useEffect(() => {
-    handleSearch();
-    return () => controllerRef.current?.abort();
-  }, [debouncedQuery]);
-
-  const handleAddIngredient = (ingredientSummaries: IngredientSummary[]) => {
+  const handleAddIngredients = (ingredientSummaries: IngredientSummary[]) => {
     addIngredient(ingredientSummaries);
-    setResults([]);
-    setQuery("");
+    resetSearch();
   };
 
   return (
-    <div className="text-black relative flex flex-col items-center max-w-sm mx-auto [&:focus-within>section]:block">
-      <div className="relative">
+    <div className="text-black relative flex flex-col items-center max-w-sm mx-auto [&:focus-within>section]:block focus-within:w-96">
+      <div className="w-full relative">
         <input
-          type="text"
-          className="w-64 pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:border-blue-500 focus:outline-none"
+          type="search"
+          className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:border-blue-500 focus:outline-none"
           placeholder="Search"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => onQuery(e.target.value)}
         />
         <span className="absolute left-0 top-0 flex items-center pl-3 h-full">
-          <span className="material-symbols-outlined">search_check</span>
+          {searching ? (
+            <span className="material-symbols-outlined animate-spin infinite">
+              autorenew
+            </span>
+          ) : (
+            <span className="material-symbols-outlined">search_check</span>
+          )}
         </span>
       </div>
+      {error && (
+        <div className="absolute top-12 min-w-sm bg-white shadow-lg rounded-lg flex items-center p-4 gap-4">
+          <span className="material-symbols-outlined text-red-500 text-3xl">
+            warning
+          </span>
+          <div className="text-sm">
+            <h3 className="font-bold">Something went wrong!</h3>
+            <p>Please try again...</p>
+          </div>
+        </div>
+      )}
       <FoodList
         ingredientSummaries={results}
         className="hidden absolute top-12 min-w-xs"
-        onAdd={handleAddIngredient}
+        onAdd={handleAddIngredients}
       />
     </div>
   );

@@ -1,13 +1,39 @@
-import { useState } from "react";
-import { Ingredient } from "../App";
+import { useContext, useMemo, useState } from "react";
+import { numberFormatter } from "../common/util";
+import { Ingredient } from "../types";
+import { IngredientContext } from "./IngredientProvider";
 
 type IngredientProps = {
   ingredient: Ingredient;
-  onRemove: (Ingredient: Ingredient) => void;
 };
 
-const IngredientDispay = ({ ingredient, onRemove }: IngredientProps) => {
+const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
+  const { removeIngredient, updateIngredient } = useContext(IngredientContext);
   const [showMore, setShowMore] = useState(false);
+  const ratio = useMemo(() => {
+    const measure = ingredient.alt_measures.find(
+      (measure) => measure.measure === ingredient.selectedUnit
+    );
+    if (!measure) return 1;
+
+    const servingPerQty = measure.serving_weight / measure.qty;
+    return (
+      (ingredient.selectedQty * servingPerQty) / ingredient.serving_weight_grams
+    );
+  }, [ingredient]);
+
+  const handleUpdateQty = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateIngredient({
+      ...ingredient,
+      [e.target.name]: e.target.valueAsNumber,
+    });
+  };
+  const handleUpdateUnit = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    updateIngredient({
+      ...ingredient,
+      [e.target.name]: e.target.value,
+    });
+  };
   return (
     <li className="w-full flex border-b-2  hover:bg-orange-50 active:bg-orange-100 h-fit">
       <img
@@ -21,51 +47,72 @@ const IngredientDispay = ({ ingredient, onRemove }: IngredientProps) => {
             {ingredient.food_name}
           </h3>
         </div>
-        <p className="text-gray-600 text-sm mb-2">
-          {ingredient.serving_qty} {ingredient.serving_unit}
-        </p>
+        <div className="text-gray-600 text-sm mb-2 flex gap-2">
+          <input
+            name="selectedQty"
+            type="number"
+            value={ingredient.selectedQty}
+            onChange={(e) => handleUpdateQty(e)}
+            className="w-12"
+          />
+          <select
+            name="selectedUnit"
+            value={ingredient.selectedUnit}
+            onChange={(e) => handleUpdateUnit(e)}
+          >
+            {ingredient.alt_measures.map((measure) => (
+              <option value={measure.measure}>{measure.measure}</option>
+            ))}
+          </select>
+          {/* {ingredient.serving_qty} {ingredient.serving_unit} */}
+        </div>
         <p className="text-gray-600 text-sm">
-          <span className="font-bold">Calories:</span> {ingredient.nf_calories}
+          <span className="font-bold">Calories:</span>{" "}
+          {numberFormatter.format(ingredient.nf_calories * ratio)}
         </p>
         {showMore && (
           <>
             <p className="text-gray-600 text-sm">
               <span className="font-bold">Total fat:</span>{" "}
-              {ingredient.nf_total_fat}g
+              {numberFormatter.format(ingredient.nf_total_fat * ratio)}g
             </p>
             <p className="text-gray-600 text-sm">
               <span className="font-bold">Saturated fat:</span>{" "}
-              {ingredient.nf_saturated_fat}g
+              {numberFormatter.format(ingredient.nf_saturated_fat * ratio)}g
             </p>
             <p className="text-gray-600 text-sm">
               <span className="font-bold">Cholesterol:</span>{" "}
-              {ingredient.nf_cholesterol}mg
+              {numberFormatter.format(ingredient.nf_cholesterol * ratio)}mg
             </p>
             <p className="text-gray-600 text-sm">
-              <span className="font-bold">Sodium:</span> {ingredient.nf_sodium}
+              <span className="font-bold">Sodium:</span>{" "}
+              {numberFormatter.format(ingredient.nf_sodium * ratio)}
               mg
             </p>
             <p className="text-gray-600 text-sm">
               <span className="font-bold">Total carbohydrate:</span>{" "}
-              {ingredient.nf_total_carbohydrate}g
+              {numberFormatter.format(ingredient.nf_total_carbohydrate * ratio)}
+              g
             </p>
             <p className="text-gray-600 text-sm">
               <span className="font-bold">Dietary fiber:</span>{" "}
-              {ingredient.nf_dietary_fiber}g
+              {numberFormatter.format(ingredient.nf_dietary_fiber * ratio)}g
             </p>
             <p className="text-gray-600 text-sm">
-              <span className="font-bold">Sugars:</span> {ingredient.nf_sugars}g
+              <span className="font-bold">Sugars:</span>{" "}
+              {numberFormatter.format(ingredient.nf_sugars * ratio)}g
             </p>
             <p className="text-gray-600 text-sm">
               <span className="font-bold">Protein:</span>{" "}
-              {ingredient.nf_protein}g
+              {numberFormatter.format(ingredient.nf_protein * ratio)}g
             </p>
             <p className="text-gray-600 text-sm">
               <span className="font-bold">Potassium:</span>{" "}
-              {ingredient.nf_potassium}mg
+              {numberFormatter.format(ingredient.nf_potassium * ratio)}mg
             </p>
             <p className="text-gray-600 text-sm">
-              <span className="font-bold">Phosphorus:</span> {ingredient.nf_p}mg
+              <span className="font-bold">Phosphorus:</span>{" "}
+              {numberFormatter.format(ingredient.nf_p * ratio)}mg
             </p>
             {/* To display the full nutrients, you can map through the array and display each nutrient */}
             {/* {ingredient.full_nutrients.map((nutrient) => (
@@ -81,7 +128,7 @@ const IngredientDispay = ({ ingredient, onRemove }: IngredientProps) => {
               </p>
             )}
             {/* To display the alternative serving measures, you can map through the array and display each measure */}
-            <p className="text-gray-600 text-sm">
+            {/* <p className="text-gray-600 text-sm">
               <span className="font-bold">Alternate Measures:</span>
             </p>
             <ul>
@@ -90,13 +137,13 @@ const IngredientDispay = ({ ingredient, onRemove }: IngredientProps) => {
                   {measure.qty} {measure.measure} ({measure.serving_weight}g)
                 </li>
               ))}
-            </ul>
+            </ul> */}
           </>
         )}
         <button onClick={() => setShowMore((preVal) => !preVal)}>...</button>
       </div>
       <button
-        onClick={() => onRemove(ingredient)}
+        onClick={() => removeIngredient(ingredient)}
         className="hover:text-red-500 active:text-red-700"
       >
         <span className="material-symbols-outlined px-6">delete</span>

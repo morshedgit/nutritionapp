@@ -1,5 +1,45 @@
-import React, { useMemo, useState } from "react";
-import { IngredientSummary } from "./Search";
+import React, { useMemo, useRef, useState } from "react";
+import { IngredientSummary } from "../types";
+
+type SelectedIngredientSummariesProps = {
+  selectedIngredientSummaries: IngredientSummary[];
+  onRemove: (ingredientSummary: IngredientSummary) => void;
+};
+
+const SelectedIngredientSummaries: React.FC<
+  SelectedIngredientSummariesProps
+> = ({ selectedIngredientSummaries, onRemove }) => {
+  const handleToggleIngredientSummary = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ingredientSummary: IngredientSummary
+  ) => {
+    e?.preventDefault();
+    onRemove(ingredientSummary);
+  };
+  return (
+    <section className="flex flex-col items-stretch" tabIndex={-1}>
+      <ul className="w-full overflow-x-auto">
+        {selectedIngredientSummaries.map((ingredientSummary) => (
+          <li key={ingredientSummary.food_name}>
+            <button
+              type="button"
+              className="unset-all"
+              onMouseDown={(e) =>
+                handleToggleIngredientSummary(e, ingredientSummary)
+              }
+            >
+              <img
+                className="w-24 h-24 object-cover rounded-full border"
+                src={ingredientSummary.photo.thumb}
+                alt={`${ingredientSummary.food_name} thumbnail`}
+              />
+            </button>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+};
 
 type SearchResultProps = {
   ingredientSummaries: IngredientSummary[];
@@ -15,19 +55,18 @@ const SearchResult: React.FC<SearchResultProps> = ({
   const [selectedIngredientSummaries, setSelectedIngredientSummaries] =
     useState<IngredientSummary[]>([]);
 
-  const handleToggleIngredientSummary = (
-    ingredientSummary: IngredientSummary
-  ) => {
-    if (selectedIngredientNames.includes(ingredientSummary.food_name)) {
-      setSelectedIngredientSummaries((preSumm) =>
-        preSumm.filter((sum) => sum.food_name !== ingredientSummary.food_name)
-      );
-      return;
-    }
+  const handleAddIngredientSummary = (ingredientSummary: IngredientSummary) => {
     setSelectedIngredientSummaries((preSumm) => [
       ...preSumm,
       ingredientSummary,
     ]);
+  };
+  const handleRemoveIngredientSummary = (
+    ingredientSummary: IngredientSummary
+  ) => {
+    setSelectedIngredientSummaries((preSumm) =>
+      preSumm.filter((sum) => sum.food_name !== ingredientSummary.food_name)
+    );
   };
 
   const selectedIngredientNames = useMemo(
@@ -36,7 +75,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
   );
 
   const handleAddIngredient = () => {
-    onAdd(ingredientSummaries);
+    onAdd(selectedIngredientSummaries);
     setSelectedIngredientSummaries([]);
   };
 
@@ -52,7 +91,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
             className="hover:bg-blue-300 leading-[0] active:bg-blue-400 border-b-2 px-4"
           >
             <button
-              onClick={() => handleToggleIngredientSummary(ingredientSummary)}
+              onClick={() => handleAddIngredientSummary(ingredientSummary)}
               className="h-28 w-full unset-all flex items-center"
             >
               <img
@@ -88,38 +127,18 @@ const SearchResult: React.FC<SearchResultProps> = ({
           </li>
         ))}
       </ul>
+      <SelectedIngredientSummaries
+        selectedIngredientSummaries={selectedIngredientSummaries}
+        onRemove={handleRemoveIngredientSummary}
+      />
+
       {selectedIngredientNames.length > 0 && (
-        <section className="flex flex-col items-stretch">
-          <ul className="w-full overflow-x-auto">
-            {selectedIngredientSummaries.map((ingredientSummary, index) => (
-              <li
-                key={ingredientSummary.food_name}
-                className={`inline-block relative ${
-                  index > 0 ? `-left-[${24 * index}px]` : ""
-                }`}
-              >
-                <button
-                  className="unset-all"
-                  onClick={() =>
-                    handleToggleIngredientSummary(ingredientSummary)
-                  }
-                >
-                  <img
-                    className="w-24 h-24 object-cover rounded-full border"
-                    src={ingredientSummary.photo.thumb}
-                    alt={`${ingredientSummary.food_name} thumbnail`}
-                  />
-                </button>
-              </li>
-            ))}
-          </ul>
-          <button
-            onClick={() => handleAddIngredient()}
-            className="p-4 rounded-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white"
-          >
-            Add Ingredients
-          </button>
-        </section>
+        <button
+          onClick={() => handleAddIngredient()}
+          className="p-4 rounded-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white"
+        >
+          Add Ingredients
+        </button>
       )}
     </section>
   );

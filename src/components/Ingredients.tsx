@@ -1,18 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import IngredientDispay from "./IngredientDisplay";
-import { Ingredient } from "./IngredientProvider";
+import { IngredientContext } from "./IngredientProvider";
 
 type IngredientsProps = {
-  ingredients: Ingredient[];
-  onRemove: (item: Ingredient) => void;
   className?: string;
 };
 
-const Ingredients: React.FC<IngredientsProps> = ({
-  ingredients,
-  className,
-  onRemove,
-}) => {
+const Ingredients: React.FC<IngredientsProps> = ({ className }) => {
+  const { ingredients } = useContext(IngredientContext);
   return (
     <ul
       tabIndex={-1}
@@ -21,7 +16,6 @@ const Ingredients: React.FC<IngredientsProps> = ({
       {ingredients.map((ingredient) => (
         <IngredientDispay
           ingredient={ingredient}
-          onRemove={onRemove}
           key={`${ingredient.food_name}`}
         />
       ))}

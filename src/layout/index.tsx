@@ -19,7 +19,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         >
           <span className="material-symbols-outlined">menu</span>
         </button>
-        {/* Placeholder for right-aligned content */}
         <Search />
         <div className="w-16"></div>
       </header>
