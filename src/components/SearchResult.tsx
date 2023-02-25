@@ -35,6 +35,11 @@ const SearchResult: React.FC<SearchResultProps> = ({
     [selectedIngredientSummaries]
   );
 
+  const handleAddIngredient = () => {
+    onAdd(ingredientSummaries);
+    setSelectedIngredientSummaries([]);
+  };
+
   return (
     <section
       tabIndex={-1}
@@ -109,7 +114,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
             ))}
           </ul>
           <button
-            onClick={() => onAdd(selectedIngredientSummaries)}
+            onClick={() => handleAddIngredient()}
             className="p-4 rounded-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white"
           >
             Add Ingredients

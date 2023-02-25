@@ -16,9 +16,7 @@ export interface IngredientSummary {
   locale: string;
 }
 
-interface SearchProps {
-  //   onAdd: (item: IngredientSummary[]) => void;
-}
+interface SearchProps {}
 
 const Search: React.FC<SearchProps> = (props) => {
   const [query, setQuery] = useState("");
@@ -63,10 +61,10 @@ const Search: React.FC<SearchProps> = (props) => {
   const handleAddIngredient = (ingredientSummaries: IngredientSummary[]) => {
     addIngredient(ingredientSummaries);
     setResults([]);
+    setQuery("");
   };
 
   return (
-    // <Search onAdd={handleAddIngredient} />
     <div className="text-black relative flex flex-col items-center max-w-sm mx-auto [&:focus-within>section]:block">
       <div className="relative">
         <input
@@ -83,7 +81,7 @@ const Search: React.FC<SearchProps> = (props) => {
       <FoodList
         ingredientSummaries={results}
         className="hidden absolute top-12 min-w-xs"
-        onAdd={addIngredient}
+        onAdd={handleAddIngredient}
       />
     </div>
   );
