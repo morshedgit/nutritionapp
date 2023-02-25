@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { debounce } from "../common/util";
-import FoodList from "./FoodList";
+import { useContext, useEffect, useRef, useState } from "react";
+import useDebounce from "../hooks/useDebounce";
+import { IngredientContext } from "./IngredientProvider";
+import FoodList from "./SearchResult";
 
 export interface IngredientSummary {
   food_name: string;
@@ -16,29 +17,35 @@ export interface IngredientSummary {
 }
 
 interface SearchProps {
-  onAdd: (item: IngredientSummary) => void;
-  //   onRemove: (item: FoodData) => void;
+  //   onAdd: (item: IngredientSummary[]) => void;
 }
 
-const Search: React.FC<SearchProps> = ({ onAdd }) => {
+const Search: React.FC<SearchProps> = (props) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<IngredientSummary[]>([]);
+  const controllerRef = useRef<AbortController | undefined>();
+  const { addIngredient } = useContext(IngredientContext);
 
   const handleSearch = async () => {
-    if (!query) {
+    if (!debouncedQuery) {
       setResults([]);
       return;
     }
 
+    const controller = new AbortController();
+    const signal = controller.signal;
+    controllerRef.current = controller;
+
     try {
       const response = await fetch(
-        `https://trackapi.nutritionix.com/v2/search/instant?query=${query}`,
+        `https://trackapi.nutritionix.com/v2/search/instant?query=${debouncedQuery}`,
         {
           headers: {
             "x-app-id": "9aa2f7ac",
             "x-app-key": "b75ff2973f91f1f6521c6d863bfb8a84",
             "x-remote-user-id": "0",
           },
+          signal,
         }
       );
       const data = await response.json();
@@ -47,14 +54,20 @@ const Search: React.FC<SearchProps> = ({ onAdd }) => {
       console.error("Error fetching search results:", error);
     }
   };
-
-  const search = debounce(handleSearch, 1000);
+  const debouncedQuery = useDebounce(query, 0);
   useEffect(() => {
-    search();
-  }, [query]);
+    handleSearch();
+    return () => controllerRef.current?.abort();
+  }, [debouncedQuery]);
+
+  const handleAddIngredient = (ingredientSummaries: IngredientSummary[]) => {
+    addIngredient(ingredientSummaries);
+    setResults([]);
+  };
 
   return (
-    <div className="relative flex flex-col items-center max-w-sm mx-auto [&:focus-within>ul]:block">
+    // <Search onAdd={handleAddIngredient} />
+    <div className="text-black relative flex flex-col items-center max-w-sm mx-auto [&:focus-within>section]:block">
       <div className="relative">
         <input
           type="text"
@@ -68,9 +81,9 @@ const Search: React.FC<SearchProps> = ({ onAdd }) => {
         </span>
       </div>
       <FoodList
-        foodList={results}
-        className="hidden absolute top-12"
-        onAdd={onAdd}
+        ingredientSummaries={results}
+        className="hidden absolute top-12 min-w-xs"
+        onAdd={addIngredient}
       />
     </div>
   );
