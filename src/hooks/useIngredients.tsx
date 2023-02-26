@@ -1,30 +1,16 @@
-import { useEffect, useMemo, useReducer, useRef, useState } from "react";
-import useSearchParams from "./useSearchParams";
+import { useMemo, useRef, useState } from "react";
 import { getIngredient } from "../services/ingredient";
-import { Ingredient, IngredientShort, Nutrients } from "../types";
+import { Ingredient, Nutrients } from "../types";
 
 const useIngredients = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const isInitialMount = useRef(true);
-
-  const {
-    searchParams: foodItems,
-    addOrUpdateParam: addFoodItem,
-    removeParam: removeFoodItem,
-    addOrUpdateParam: updateFoodItem,
-  } = useSearchParams();
-
-  useEffect(() => {
-    if (!isInitialMount.current) return;
-    initIngredients(foodItems);
-  }, [foodItems]);
 
   const handleRemoveIngredient = (ingredient: Ingredient) => {
     isInitialMount.current = false;
     setIngredients((preIng) =>
       preIng.filter((ing) => ing.food_name !== ingredient.food_name)
     );
-    removeFoodItem(ingredient.food_name);
   };
   const handleUpdateIngredient = (ingredient: Ingredient) => {
     isInitialMount.current = false;
@@ -34,23 +20,6 @@ const useIngredients = () => {
         return ingredient;
       })
     );
-    updateFoodItem({
-      food_name: ingredient.food_name,
-      selected_qty: ingredient.selectedQty,
-      selected_unit: ingredient.selectedUnit,
-    });
-  };
-
-  const initIngredients = async (ingredientShorts: IngredientShort[]) => {
-    ingredientShorts.forEach(async (ingredientShort) => {
-      const ingredient = await getIngredient(ingredientShort);
-      if (!ingredient) return;
-      ingredient.selectedQty = ingredientShort.selected_qty;
-      ingredient.selectedUnit = ingredientShort.selected_unit;
-      setIngredients((preIngredients) => [
-        ...new Set([...preIngredients, ingredient]),
-      ]);
-    });
   };
 
   const handleAddIngredients = <T extends { food_name: string }>(
@@ -73,11 +42,6 @@ const useIngredients = () => {
       );
       if (index >= 0) return preIngredients;
       return [...new Set([...preIngredients, ingredient])];
-    });
-    addFoodItem({
-      food_name: ingredient.food_name,
-      selected_qty: ingredient.selectedQty,
-      selected_unit: ingredient.selectedUnit,
     });
   };
 

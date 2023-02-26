@@ -1,6 +1,5 @@
 import { Ingredient } from "../types";
 
-// const ingredientCache = new Map<string, Ingredient>();
 class Cache {
   storeKey: string;
   constructor(key: string) {
