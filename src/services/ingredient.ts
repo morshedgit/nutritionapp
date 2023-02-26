@@ -27,6 +27,7 @@ class Cache {
 }
 
 const ingredientCache = new Cache("ingredientCache");
+
 export const getIngredient = async <T extends { food_name: string }>(
   ingredientSummary: T
 ) => {
@@ -48,8 +49,8 @@ export const getIngredient = async <T extends { food_name: string }>(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-app-id": "cfa14691",
-        "x-app-key": "8805b525ad3a769b65a624e72a8b5d38",
+        "x-app-id": import.meta.env.VITE_NUTRITIONIX_APP_ID!,
+        "x-app-key": import.meta.env.VITE_NUTRITIONIX_APP_KEY!,
         "x-remote-user-id": "0",
       },
       body,
@@ -64,4 +65,26 @@ export const getIngredient = async <T extends { food_name: string }>(
   ingredient.selectedQty = ingredient.serving_qty;
   ingredient.selectedUnit = ingredient.serving_unit;
   return ingredient;
+};
+
+export const getSearchResults = async ({
+  query,
+  signal,
+}: {
+  query: string;
+  signal: AbortSignal;
+}) => {
+  const response = await fetch(
+    `https://trackapi.nutritionix.com/v2/search/instant?query=${query}`,
+    {
+      headers: {
+        "x-app-id": import.meta.env.VITE_NUTRITIONIX_APP_ID!,
+        "x-app-key": import.meta.env.VITE_NUTRITIONIX_APP_KEY!,
+        "x-remote-user-id": "0",
+      },
+      signal,
+    }
+  );
+  const data = await response.json();
+  return data;
 };

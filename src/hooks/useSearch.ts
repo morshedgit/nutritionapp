@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { getSearchResults } from "../services/ingredient";
 import { IngredientSummary } from "../types";
 import useDebounce from "./useDebounce";
 
@@ -24,18 +25,7 @@ const useSearch = () => {
     controllerRef.current = controller;
 
     try {
-      const response = await fetch(
-        `https://trackapi.nutritionix.com/v2/search/instant?query=${debouncedQuery}`,
-        {
-          headers: {
-            "x-app-id": "cfa14691",
-            "x-app-key": "8805b525ad3a769b65a624e72a8b5d38",
-            "x-remote-user-id": "0",
-          },
-          signal,
-        }
-      );
-      const data = await response.json();
+      const data = await getSearchResults({ query: debouncedQuery, signal });
       setResults(data.common);
     } catch (error: any) {
       console.error("Error fetching search results:", error);

@@ -50,6 +50,7 @@ const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
         <div className="text-gray-600 text-sm mb-2 flex gap-2">
           <input
             name="selectedQty"
+            min={0}
             type="number"
             value={ingredient.selectedQty}
             onChange={(e) => handleUpdateQty(e)}
