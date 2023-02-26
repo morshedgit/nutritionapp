@@ -28,8 +28,8 @@ const useSearch = () => {
         `https://trackapi.nutritionix.com/v2/search/instant?query=${debouncedQuery}`,
         {
           headers: {
-            "x-app-id": "9aa2f7ac",
-            "x-app-key": "b75ff2973f91f1f6521c6d863bfb8a84",
+            "x-app-id": "cfa14691",
+            "x-app-key": "8805b525ad3a769b65a624e72a8b5d38",
             "x-remote-user-id": "0",
           },
           signal,

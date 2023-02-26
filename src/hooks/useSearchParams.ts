@@ -1,76 +1,62 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { IngredientShort } from "../types";
 
-interface FoodItem {
-  food_name: string;
-  selected_qty: number;
-  selected_unit: string;
-}
-
-const useSearchParams = (): [
-  FoodItem[],
-  (foods: FoodItem[]) => void,
-  (foodName: string) => void,
-  (foodName: string, newFood: FoodItem) => void,
-  (newFood: FoodItem) => void
-] => {
-  const [searchParams, setSearchParams] = useState<FoodItem[]>([]);
+function useSearchParams() {
+  const [searchParams, setSearchParams] = useState<IngredientShort[]>([]);
+  const intialRef = useRef(true);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const foodItems: FoodItem[] = [];
-
-    params.getAll("food").forEach((food) => {
-      const [food_name, selected_qty, selected_unit] = food.split("|");
-      foodItems.push({
-        food_name,
-        selected_qty: Number(selected_qty),
-        selected_unit,
-      });
-    });
-
+    const searchParamsString = window.location.search.substring(1);
+    const params = new URLSearchParams(searchParamsString);
+    const foodItems = params
+      .getAll("foodItem")
+      .map((item: string) => JSON.parse(item));
     setSearchParams(foodItems);
   }, []);
 
-  const setFoodItems = (foods: FoodItem[]): void => {
-    const params = new URLSearchParams();
-    foods.forEach(({ food_name, selected_qty, selected_unit }) => {
-      params.append("food", `${food_name}|${selected_qty}|${selected_unit}`);
-    });
-
-    const search = params.toString();
-    const url = `${window.location.pathname}?${search}`;
-    window.history.replaceState(null, "", url);
-
-    setSearchParams(foods);
-  };
-
-  const removeFoodByName = (foodName: string): void => {
-    const updatedFoods = searchParams.filter(
-      (food) => food.food_name !== foodName
+  const addOrUpdateParam = (param: IngredientShort) => {
+    const index = searchParams.findIndex(
+      (item) => item.food_name === param.food_name
     );
-    setFoodItems(updatedFoods);
+    if (index >= 0) {
+      setSearchParams([
+        ...searchParams.slice(0, index),
+        param,
+        ...searchParams.slice(index + 1),
+      ]);
+    } else {
+      setSearchParams([...searchParams, param]);
+    }
   };
 
-  const updateFoodByName = (foodName: string, newFood: FoodItem): void => {
-    const updatedFoods = searchParams.map((food) => {
-      if (food.food_name === foodName) {
-        return newFood;
-      }
-      return food;
+  const removeParam = (name: string) => {
+    const index = searchParams.findIndex((item) => item.food_name === name);
+    if (index >= 0) {
+      setSearchParams([
+        ...searchParams.slice(0, index),
+        ...searchParams.slice(index + 1),
+      ]);
+    }
+  };
+
+  useEffect(() => {
+    if (intialRef.current) {
+      intialRef.current = false;
+      return;
+    }
+    const params = new URLSearchParams();
+    searchParams.forEach((param) => {
+      params.append("foodItem", JSON.stringify(param));
     });
-    setFoodItems(updatedFoods);
-  };
+    const search = params.toString() ? `?${params.toString()}` : "";
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${search}${window.location.hash}`
+    );
+  }, [searchParams]);
 
-  const addFoodItem = (newFood: FoodItem): void => {
-    setFoodItems([...searchParams, newFood]);
-  };
+  return { searchParams, addOrUpdateParam, removeParam };
+}
 
-  return [
-    searchParams,
-    setFoodItems,
-    removeFoodByName,
-    updateFoodByName,
-    addFoodItem,
-  ];
-};
 export default useSearchParams;

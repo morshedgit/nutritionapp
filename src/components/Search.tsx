@@ -7,7 +7,7 @@ import FoodList from "./SearchResult";
 interface SearchProps {}
 
 const Search: React.FC<SearchProps> = (props) => {
-  const { addIngredient } = useContext(IngredientContext);
+  const { addIngredients: addIngredient } = useContext(IngredientContext);
   const { results, searching, error, query, onQuery, resetSearch } =
     useSearch();
 

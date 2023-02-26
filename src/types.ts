@@ -61,7 +61,7 @@ export type Nutrients = {
   nf_potassium: number;
 };
 
-export interface IngredientSummary {
+export type IngredientSummary = {
   food_name: string;
   serving_unit: string;
   tag_name: string;
@@ -72,4 +72,10 @@ export interface IngredientSummary {
     thumb: string;
   };
   locale: string;
-}
+};
+
+export type IngredientShort = {
+  food_name: string;
+  selected_qty: number;
+  selected_unit: string;
+};

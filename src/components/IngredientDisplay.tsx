@@ -61,10 +61,11 @@ const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
             onChange={(e) => handleUpdateUnit(e)}
           >
             {ingredient.alt_measures.map((measure) => (
-              <option value={measure.measure}>{measure.measure}</option>
+              <option key={measure.measure} value={measure.measure}>
+                {measure.measure}
+              </option>
             ))}
           </select>
-          {/* {ingredient.serving_qty} {ingredient.serving_unit} */}
         </div>
         <p className="text-gray-600 text-sm">
           <span className="font-bold">Calories:</span>{" "}
