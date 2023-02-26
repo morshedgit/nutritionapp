@@ -116,30 +116,11 @@ const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
               <span className="font-bold">Phosphorus:</span>{" "}
               {numberFormatter.format(ingredient.nf_p * ratio)}mg
             </p>
-            {/* To display the full nutrients, you can map through the array and display each nutrient */}
-            {/* {ingredient.full_nutrients.map((nutrient) => (
-              <p className="text-gray-600 text-sm" key={nutrient.attr_id}>
-                <span className="font-bold">{nutrient.attr_name}:</span>{" "}
-                {nutrient.value} {nutrient.unit}
-              </p>
-            ))} */}
-            {/* To display the tag, you can check if it exists and display*/}
             {ingredient.tags && (
               <p className="text-gray-600 text-sm">
                 <span className="font-bold">Tag:</span> {ingredient.tags.item}
               </p>
             )}
-            {/* To display the alternative serving measures, you can map through the array and display each measure */}
-            {/* <p className="text-gray-600 text-sm">
-              <span className="font-bold">Alternate Measures:</span>
-            </p>
-            <ul>
-              {ingredient.alt_measures.map((measure) => (
-                <li key={`${measure.measure}-${measure.qty}`}>
-                  {measure.qty} {measure.measure} ({measure.serving_weight}g)
-                </li>
-              ))}
-            </ul> */}
           </>
         )}
         <button onClick={() => setShowMore((preVal) => !preVal)}>...</button>
