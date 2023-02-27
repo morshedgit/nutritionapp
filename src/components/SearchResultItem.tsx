@@ -6,6 +6,14 @@ type SearchResultItemProps = {
   isSelected: boolean;
 };
 
+/**
+ * Renders an item in the search result list.
+ * @param {Object} props - The component props.
+ * @param {IngredientSummary} props.ingredientSummary - The summary of the ingredient to display.
+ * @param {(ingredientSummary: IngredientSummary) => void} props.onAddIngredientSummary - The callback function to add the ingredient to the selected list.
+ * @param {boolean} props.isSelected - Indicates if the ingredient is already selected.
+ * @returns {JSX.Element} - The rendered component.
+ */
 const SearchResultItem: React.FC<SearchResultItemProps> = ({
   ingredientSummary,
   onAddIngredientSummary,

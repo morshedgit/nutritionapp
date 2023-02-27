@@ -3,13 +3,28 @@ import { numberFormatter } from "../common/util";
 import { Ingredient } from "../types";
 import { IngredientContext } from "./IngredientProvider";
 
+/**
+ * IngredientProps is an interface for the props passed to the IngredientDisplay component
+ * @interface
+ */
 type IngredientProps = {
   ingredient: Ingredient;
 };
 
+/**
+ * IngredientDisplay component displays an ingredient and its properties
+ * @function
+ * @param {IngredientProps} props - Component props
+ * @returns {JSX.Element} - Rendered component
+ */
 const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
   const { removeIngredient, updateIngredient } = useContext(IngredientContext);
   const [showMore, setShowMore] = useState(false);
+
+  /**
+   * Ratio is the proportion of the serving size compared to the selected amount and unit of the ingredient
+   * @type {number}
+   */
   const ratio = useMemo(() => {
     const measure = ingredient.alt_measures.find(
       (measure) => measure.measure === ingredient.selectedUnit
@@ -22,13 +37,26 @@ const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
     );
   }, [ingredient]);
 
-  const handleUpdateQty = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /**
+   * handleUpdateQty updates the selected quantity of the ingredient
+   * @function
+   * @param {React.ChangeEvent<HTMLInputElement>} e - Event object
+   * @returns {void}
+   */
+  const handleUpdateQty = (e: React.ChangeEvent<HTMLInputElement>): void => {
     updateIngredient({
       ...ingredient,
       [e.target.name]: e.target.valueAsNumber,
     });
   };
-  const handleUpdateUnit = (e: React.ChangeEvent<HTMLSelectElement>) => {
+
+  /**
+   * handleUpdateUnit updates the selected unit of the ingredient
+   * @function
+   * @param {React.ChangeEvent<HTMLSelectElement>} e - Event object
+   * @returns {void}
+   */
+  const handleUpdateUnit = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     updateIngredient({
       ...ingredient,
       [e.target.name]: e.target.value,

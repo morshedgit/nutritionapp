@@ -2,13 +2,24 @@ import React, { createContext, ReactNode } from "react";
 import { Ingredient, IngredientSummary, Nutrients } from "../types";
 import useIngredients from "../hooks/useIngredients";
 
-export const IngredientContext = createContext<{
+type IngredientContextProps = {
   ingredients: Ingredient[];
   removeIngredient: (ingredient: Ingredient) => void;
   updateIngredient: (ingredient: Ingredient) => void;
   addIngredients: (ingredientSummaries: IngredientSummary[]) => void;
   totalMealNutrientCount: Nutrients;
-}>({
+};
+/**
+ * Context object for managing ingredients and their nutrient data
+ * @typedef {Object} IngredientContext
+ * @property {Array<Ingredient>} ingredients - Array of ingredients in the current meal
+ * @property {function(ingredient: Ingredient): void} removeIngredient - Function to remove an ingredient from the meal
+ * @property {function(ingredient: Ingredient): void} updateIngredient - Function to update an ingredient in the meal
+ * @property {function(ingredientSummaries: Array<IngredientSummary>): void} addIngredients - Function to add new ingredients to the meal
+ * @property {Nutrients} totalMealNutrientCount - Object representing total nutrient count for the entire meal
+ */
+
+export const IngredientContext = createContext<IngredientContextProps>({
   ingredients: [],
   removeIngredient: () => {},
   updateIngredient: () => {},
@@ -27,9 +38,21 @@ export const IngredientContext = createContext<{
   },
 });
 
+/**
+ * Props for IngredientProvider component
+ * @typedef {Object} IngredientProviderProps
+ * @property {ReactNode} children - Child components to be wrapped by IngredientProvider
+ */
+
 type IngredientProviderProps = {
   children: ReactNode;
 };
+
+/**
+ * Higher-order component that provides IngredientContext to its children
+ * @param {IngredientProviderProps} props - Component props
+ * @returns {JSX.Element} - JSX element representing wrapped child components with IngredientContext
+ */
 
 const IngredientProvider: React.FC<IngredientProviderProps> = (props) => {
   const {

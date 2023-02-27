@@ -3,6 +3,18 @@ import { getSearchResults } from "../services/ingredient";
 import { IngredientSummary } from "../types";
 import useDebounce from "./useDebounce";
 
+/**
+ * A custom hook to handle search functionality for ingredients.
+ *
+ * @returns {{
+ *    results: Array<IngredientSummary>,
+ *    searching: boolean,
+ *    error: string,
+ *    query: string,
+ *    onQuery: (q: string) => void,
+ *    resetSearch: () => void,
+ * }}
+ */
 const useSearch = () => {
   const [query, setQuery] = useState("");
   const [searching, setSearching] = useState(false);
@@ -10,6 +22,9 @@ const useSearch = () => {
   const [results, setResults] = useState<IngredientSummary[]>([]);
   const controllerRef = useRef<AbortController | undefined>();
 
+  /**
+   * Handles the search functionality by debouncing the query and fetching the search results.
+   */
   const handleSearch = async () => {
     if (!debouncedQuery) {
       setResults([]);
@@ -34,7 +49,16 @@ const useSearch = () => {
       setSearching(false);
     }
   };
+
+  /**
+   * Debounces the search query to reduce the number of API requests made.
+   */
   const debouncedQuery = useDebounce(query, 300);
+
+  /**
+   * Fetches the search results when the debounced query changes.
+   * Also, aborts any previous search request before sending a new one.
+   */
   useEffect(() => {
     handleSearch();
     return () => controllerRef.current?.abort();

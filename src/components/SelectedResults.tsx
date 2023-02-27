@@ -5,6 +5,16 @@ type SelectedResultsProps = {
   onRemove: (ingredientSummary: IngredientSummary) => void;
 };
 
+/**
+ * A component that displays a list of selected ingredient summaries, and allows removing them.
+ * @component
+ *
+ * @param {object} props - The component props.
+ * @param {IngredientSummary[]} props.selectedIngredientSummaries - An array of selected ingredient summaries to display.
+ * @param {function} props.onRemove - A callback function to remove an ingredient summary from the list.
+ *
+ * @returns {JSX.Element} The JSX element for the `SelectedResults` component.
+ */
 const SelectedResults: React.FC<SelectedResultsProps> = ({
   selectedIngredientSummaries,
   onRemove,

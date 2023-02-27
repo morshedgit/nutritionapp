@@ -1,10 +1,25 @@
 import { Ingredient } from "../types";
 
+/**
+ * A class that provides caching functionality using the browser's localStorage API.
+ * @class
+ */
 class Cache {
   storeKey: string;
+  /**
+   * @constructor
+   * @param {string} key - The key to be used for storing items in the cache.
+   */
   constructor(key: string) {
     this.storeKey = key;
   }
+
+  /**
+   * Adds an item to the cache.
+   * @template T
+   * @param {string} key - The key to be used for storing the item in the cache.
+   * @param {T} value - The value to be stored in the cache.
+   */
   setItem<T>(key: string, value: T) {
     let storeString = localStorage.getItem(this.storeKey);
     if (!storeString) {
@@ -16,6 +31,13 @@ class Cache {
     store[key] = value;
     localStorage.setItem(this.storeKey, JSON.stringify(store));
   }
+
+  /**
+   * Retrieves an item from the cache.
+   * @template T
+   * @param {string} key - The key used to store the item in the cache.
+   * @returns {T|undefined} The cached item, or undefined if the key is not found in the cache.
+   */
   getItem<T>(key: string) {
     let storeString = localStorage.getItem(this.storeKey);
     if (!storeString) return;
@@ -28,6 +50,13 @@ class Cache {
 
 const ingredientCache = new Cache("ingredientCache");
 
+/**
+ * Retrieves detailed nutritional information for a given ingredient summary.
+ * @async
+ * @template T
+ * @param {T} ingredientSummary - A summary of the ingredient to retrieve nutritional information for.
+ * @returns {Promise<Ingredient|undefined>} A promise that resolves to the detailed nutritional information for the ingredient, or undefined if the information cannot be retrieved.
+ */
 export const getIngredient = async <T extends { food_name: string }>(
   ingredientSummary: T
 ) => {
@@ -67,6 +96,14 @@ export const getIngredient = async <T extends { food_name: string }>(
   return ingredient;
 };
 
+/**
+ * Retrieves search results for a given query string.
+ * @async
+ * @param {object} options - An object containing options for the search.
+ * @param {string} options.query - The query string to search for.
+ * @param {AbortSignal} options.signal - An AbortSignal object that can be used to cancel the request.
+ * @returns {Promise<object>} A promise that resolves to the search results.
+ */
 export const getSearchResults = async ({
   query,
   signal,

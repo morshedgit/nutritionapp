@@ -1,4 +1,12 @@
-const BeginContent = () => {
+/**
+ * A component that displays the introductory content for the Nutrition App,
+ * including a title, description, and an image.
+ * @component
+ * @return {JSX.Element} Returns the IntroContent component.
+ * @example
+ * <IntroContent />
+ */
+const IntroContent = () => {
   return (
     <article className="w-full grid grid-cols-1 sm:grid-cols-2 items-center px-12">
       <section>
@@ -24,4 +32,4 @@ const BeginContent = () => {
   );
 };
 
-export default BeginContent;
+export default IntroContent;

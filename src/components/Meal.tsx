@@ -1,8 +1,22 @@
 import React, { useContext } from "react";
-import BeginContent from "./BeginContent";
+import IntroContent from "./IntroContent";
 import { IngredientContext } from "./IngredientProvider";
 import Ingredients from "./Ingredients";
 import NutrientsDisplay from "./NutrientsDisplay";
+
+/**
+ * A functional React component that displays a meal's nutrients and ingredients using the NutrientsDisplay and Ingredients components, respectively.
+ *
+ * @function
+ * @name Meal
+ *
+ * @returns {JSX.Element} The Meal component.
+ *
+ * @example
+ * // Example usage:
+ * <Meal />
+ *
+ */
 type MealProps = {};
 
 const Meal: React.FC<MealProps> = (props) => {
@@ -10,7 +24,7 @@ const Meal: React.FC<MealProps> = (props) => {
 
   return (
     <>
-      {ingredients.length === 0 && <BeginContent />}
+      {ingredients.length === 0 && <IntroContent />}
       {ingredients.length > 0 && (
         <div className="w-full pt-10">
           <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">

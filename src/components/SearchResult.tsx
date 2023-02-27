@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { IngredientSummary } from "../types";
 import SearchResultItem from "./SearchResultItem";
 import SelectedResults from "./SelectedResults";
@@ -9,6 +9,18 @@ type SearchResultProps = {
   className?: string;
 };
 
+/**
+ * Renders a list of search results for ingredients and a section for selected results.
+ *
+ * @component
+ *
+ * @param {Object} props - The component props.
+ * @param {Array} props.ingredientSummaries - An array of ingredient summary objects to display.
+ * @param {Function} props.onAdd - A callback function to execute when the "All Done!!!" button is clicked.
+ * @param {string} [props.className] - Additional class names to apply to the component.
+ *
+ * @returns {JSX.Element} A React JSX element representing the SearchResult component.
+ */
 const SearchResult: React.FC<SearchResultProps> = ({
   ingredientSummaries,
   className,

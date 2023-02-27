@@ -6,7 +6,13 @@ type Props = {
   nutrients: Nutrients;
   className?: string;
 };
-
+/**
+ * Component that displays the nutrition information of a meal.
+ * @param {Object} props - The props object that contains the following properties:
+ * @param {Object} props.nutrients - An object that contains the nutrition information of a meal.
+ * @param {string} [props.className] - An optional CSS class name to apply to the component.
+ * @returns {JSX.Element} - A React JSX element that displays the nutrition information of a meal.
+ */
 const NutrientsDisplay: React.FC<Props> = ({ nutrients, className }) => {
   return (
     <div
