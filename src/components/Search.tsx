@@ -2,7 +2,7 @@ import { useContext } from "react";
 import useSearch from "../hooks/useSearch";
 import { IngredientSummary } from "../types";
 import { IngredientContext } from "./IngredientProvider";
-import FoodList from "./SearchResult";
+import SearchResult from "./SearchResult";
 
 interface SearchProps {}
 
@@ -17,7 +17,7 @@ const Search: React.FC<SearchProps> = (props) => {
   };
 
   return (
-    <div className="text-black relative flex flex-col items-center max-w-sm mx-auto [&:focus-within>section]:block focus-within:w-96">
+    <div className="[&:focus-within]:w-full md:max-w-md text-black relative flex flex-col items-center mx-auto [&:focus-within>section]:block">
       <div className="w-full relative">
         <input
           type="search"
@@ -47,9 +47,9 @@ const Search: React.FC<SearchProps> = (props) => {
           </div>
         </div>
       )}
-      <FoodList
+      <SearchResult
         ingredientSummaries={results}
-        className="hidden absolute top-12 min-w-xs"
+        className="hidden absolute top-12 w-[inherit]"
         onAdd={handleAddIngredients}
       />
     </div>

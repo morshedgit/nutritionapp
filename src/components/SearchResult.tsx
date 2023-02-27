@@ -44,7 +44,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
   return (
     <section
       tabIndex={-1}
-      className={`shadow-lg rounded-lg bg-white ${className}`}
+      className={`py-4 shadow-lg rounded-lg bg-white ${className}`}
     >
       <ul className="grid grid-cols-1 gap-2 max-h-96 overflow-y-scroll ">
         {ingredientSummaries.map((ingredientSummary) => (
@@ -58,10 +58,12 @@ const SearchResult: React.FC<SearchResultProps> = ({
           />
         ))}
       </ul>
-      <SelectedResults
-        selectedIngredientSummaries={selectedIngredientSummaries}
-        onRemove={handleRemoveIngredientSummary}
-      />
+      {selectedIngredientNames.length > 0 && (
+        <SelectedResults
+          selectedIngredientSummaries={selectedIngredientSummaries}
+          onRemove={handleRemoveIngredientSummary}
+        />
+      )}
 
       {selectedIngredientNames.length > 0 && (
         <button
