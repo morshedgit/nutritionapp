@@ -17,7 +17,7 @@ const SelectedResults: React.FC<SelectedResultsProps> = ({
     onRemove(ingredientSummary);
   };
   return (
-    <section className="flex flex-col items-stretch" tabIndex={-1}>
+    <section className="flex flex-col items-stretch bg-green-200" tabIndex={-1}>
       <ul className="w-full p-2 flex flex-wrap gap-2">
         {selectedIngredientSummaries.map((ingredientSummary) => (
           <li key={ingredientSummary.food_name}>

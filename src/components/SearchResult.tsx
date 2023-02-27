@@ -46,9 +46,9 @@ const SearchResult: React.FC<SearchResultProps> = ({
       tabIndex={-1}
       className={`${
         ingredientSummaries.length > 0 ? "py-4" : ""
-      } shadow-lg rounded-lg bg-white ${className}`}
+      } shadow-lg rounded-3xl ${className} bg-green-100`}
     >
-      <ul className="grid grid-cols-1 gap-2 max-h-96 overflow-y-scroll">
+      <ul className="grid grid-cols-1 gap-2 max-h-96 overflow-y-scroll bg-green-100 ">
         {ingredientSummaries.map((ingredientSummary) => (
           <SearchResultItem
             key={ingredientSummary.food_name}
@@ -68,12 +68,14 @@ const SearchResult: React.FC<SearchResultProps> = ({
       )}
 
       {selectedIngredientNames.length > 0 && (
-        <button
-          onClick={() => handleAddIngredient()}
-          className="p-4 rounded-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white"
-        >
-          Add Ingredients
-        </button>
+        <section className="w-full flex justify-center mt-4 bg-green-100">
+          <button
+            onClick={() => handleAddIngredient()}
+            className="py-2 px-4 rounded-full bg-orange-400 hover:bg-orange-500 active:bg-orange-600"
+          >
+            All Done!!!
+          </button>
+        </section>
       )}
     </section>
   );

@@ -17,11 +17,11 @@ const Search: React.FC<SearchProps> = (props) => {
   };
 
   return (
-    <div className="[&:focus-within]:w-full md:max-w-md text-black relative flex flex-col items-center mx-auto [&:focus-within>section]:block">
+    <div className="text-black flex flex-col items-center mx-auto [&:focus-within>section]:block w-24 md:min-w-[20rem] [&:focus-within]:w-full md:max-w-md [&:focus-within]:absolute md:[&:focus-within]:relative  md:relative">
       <div className="w-full relative">
         <input
           type="search"
-          className="w-full min-w-[20rem] pl-10 pr-4 py-2 rounded-full border border-green-600 focus:border-green-800 bg-green-300 focus:outline-none [&::placeholder]:truncate"
+          className="w-full pl-10 pr-4 py-2 rounded-full border border-green-600 focus:border-green-800 bg-green-300 focus:outline-none [&::placeholder]:truncate"
           placeholder="Search For Ingredients, Foods,..."
           value={query}
           onChange={(e) => onQuery(e.target.value)}

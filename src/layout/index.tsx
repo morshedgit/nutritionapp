@@ -38,7 +38,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
-      <header className="bg-green-400 w-full h-16 flex items-center justify-between py-4">
+      <header className="bg-green-400 w-full h-16 flex items-center justify-between py-4 relative">
         {/* Toggle Sidebar Button */}
         <button
           className="rounded-md p-4 hover:bg-green-500 active:bg-green-600"
