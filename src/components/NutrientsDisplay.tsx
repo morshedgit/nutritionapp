@@ -10,7 +10,7 @@ type Props = {
 const NutrientsDisplay: React.FC<Props> = ({ nutrients, className }) => {
   return (
     <div
-      className={`border-8 border-green-800 border-solid p-6 ${
+      className={`border-8 border-green-800 border-solid p-6 rounded-2xl ${
         className ?? ""
       }`}
     >
@@ -30,49 +30,49 @@ const NutrientsDisplay: React.FC<Props> = ({ nutrients, className }) => {
           <p>{numberFormatter.format(nutrients.nf_total_fat)}g</p>
         </div>
         <div className="flex justify-between text-lg font-bold border-t-solid border-t-black border-t-2">
-          <p className="text-gray-600">Saturated Fat:</p>
+          <p>Saturated Fat</p>
           <p className="font-bold">
             {numberFormatter.format(nutrients.nf_saturated_fat)}g
           </p>
         </div>
         <div className="flex justify-between text-lg font-bold border-t-solid border-t-black border-t-2">
-          <p className="text-gray-600">Cholesterol:</p>
+          <p>Cholesterol</p>
           <p className="font-bold">
             {numberFormatter.format(nutrients.nf_cholesterol)}mg
           </p>
         </div>
         <div className="flex justify-between text-lg font-bold border-t-solid border-t-black border-t-2">
-          <p className="text-gray-600">Sodium:</p>
+          <p>Sodium</p>
           <p className="font-bold">
             {numberFormatter.format(nutrients.nf_sodium)}mg
           </p>
         </div>
         <div className="flex justify-between text-lg font-bold border-t-solid border-t-black border-t-2">
-          <p className="text-gray-600">Total Carbohydrate:</p>
+          <p>Total Carbohydrate</p>
           <p className="font-bold">
             {numberFormatter.format(nutrients.nf_total_carbohydrate)}g
           </p>
         </div>
         <div className="flex justify-between text-lg font-bold border-t-solid border-t-black border-t-2">
-          <p className="text-gray-600">Dietary Fiber:</p>
+          <p>Dietary Fiber</p>
           <p className="font-bold">
             {numberFormatter.format(nutrients.nf_dietary_fiber)}g
           </p>
         </div>
         <div className="flex justify-between text-lg font-bold border-t-solid border-t-black border-t-2">
-          <p className="text-gray-600">Sugars:</p>
+          <p>Sugars</p>
           <p className="font-bold">
             {numberFormatter.format(nutrients.nf_sugars)}g
           </p>
         </div>
         <div className="flex justify-between text-lg font-bold border-t-solid border-t-black border-t-2">
-          <p className="text-gray-600">Protein:</p>
+          <p>Protein</p>
           <p className="font-bold">
             {numberFormatter.format(nutrients.nf_protein)}g
           </p>
         </div>
         <div className="flex justify-between text-lg font-bold border-t-solid border-t-black border-t-2">
-          <p className="text-gray-600">Potassium:</p>
+          <p>Potassium</p>
           <p className="font-bold">
             {numberFormatter.format(nutrients.nf_potassium)}mg
           </p>

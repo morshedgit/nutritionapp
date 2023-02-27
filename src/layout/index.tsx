@@ -57,7 +57,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </h2>
         <Search />
         <div className="w-fit pr-4">
-          <a href="#">Log in / Sign Up</a>
+          <a href="#">Login / Sign Up</a>
         </div>
       </header>
       <div className="flex-grow flex">
