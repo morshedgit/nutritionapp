@@ -16,7 +16,7 @@ const Meal: React.FC<MealProps> = (props) => {
           <section className="grid grid-cols-1 lg:grid-cols-2">
             <NutrientsDisplay
               nutrients={totalMealNutrientCount}
-              className="lg:col-start-2 min-w-full"
+              className="lg:col-start-2 min-w-full h-fit"
             />
             <Ingredients className="lg:col-start-1 lg:row-start-1 min-w-full" />
           </section>

@@ -41,7 +41,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <header className="bg-green-400 w-full h-16 flex items-center justify-between py-4 relative">
         {/* Toggle Sidebar Button */}
         <button
-          className="rounded-md p-4 hover:bg-green-500 active:bg-green-600"
+          className="px-4 p-2 hover:bg-green-500 active:bg-green-600"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           <span className="material-symbols-outlined text-4xl">menu</span>

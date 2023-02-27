@@ -5,7 +5,7 @@ const BeginContent = () => {
         <h1 className="capitalize text-2xl font-semibold tracking-wide mb-12">
           Find Out Everything About Your Meal
         </h1>
-        <div className="text-2xl font-light max-w-[15rem]">
+        <div className="text-2xl font-light">
           <p>
             Search for <span className="text-orange-500">Ingredients,</span>
           </p>
