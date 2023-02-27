@@ -44,9 +44,11 @@ const SearchResult: React.FC<SearchResultProps> = ({
   return (
     <section
       tabIndex={-1}
-      className={`py-4 shadow-lg rounded-lg bg-white ${className}`}
+      className={`${
+        ingredientSummaries.length > 0 ? "py-4" : ""
+      } shadow-lg rounded-lg bg-white ${className}`}
     >
-      <ul className="grid grid-cols-1 gap-2 max-h-96 overflow-y-scroll ">
+      <ul className="grid grid-cols-1 gap-2 max-h-96 overflow-y-scroll">
         {ingredientSummaries.map((ingredientSummary) => (
           <SearchResultItem
             key={ingredientSummary.food_name}
