@@ -13,12 +13,12 @@ const Meal: React.FC<MealProps> = (props) => {
       {ingredients.length === 0 && <BeginContent />}
       {ingredients.length > 0 && (
         <div className="w-full pt-10">
-          <section className="grid grid-cols-1 md:grid-cols-2">
+          <section className="grid grid-cols-1 lg:grid-cols-2">
             <NutrientsDisplay
               nutrients={totalMealNutrientCount}
-              className="md:col-start-2 min-w-full"
+              className="lg:col-start-2 min-w-full"
             />
-            <Ingredients className="md:col-start-1 md:row-start-1 min-w-full" />
+            <Ingredients className="lg:col-start-1 lg:row-start-1 min-w-full" />
           </section>
         </div>
       )}

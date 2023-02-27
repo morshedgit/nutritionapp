@@ -18,7 +18,7 @@ const BeginContent = () => {
         </div>
       </section>
       <section>
-        <img src="/selectIngredient.png" alt="select food" />
+        <img src="/nutritionapp/selectIngredient.png" alt="select food" />
       </section>
     </article>
   );

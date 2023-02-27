@@ -11,7 +11,7 @@ const Ingredients: React.FC<IngredientsProps> = ({ className }) => {
   return (
     <ul
       tabIndex={-1}
-      className={`flex flex-col gap-2 max-w-md shadow-lg rounded-lg ${className}`}
+      className={`bg-green-100 flex flex-col gap-2 max-w-md shadow-lg rounded-3xl py-4 ${className}`}
     >
       {ingredients.map((ingredient) => (
         <IngredientDispay

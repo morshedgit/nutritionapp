@@ -35,9 +35,9 @@ const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
     });
   };
   return (
-    <li className="w-full flex border-b-2  hover:bg-orange-50 active:bg-orange-100 h-fit">
+    <li className="w-full flex border-b-2 bg-green-100 hover:bg-orange-100 leading-[0] active:bg-orange-200 h-fit pb-2">
       <img
-        className="w-24 h-24 object-cover rounded-lg m-2"
+        className="w-24 h-24 object-cover rounded-full m-2"
         src={ingredient.photo.thumb}
         alt={`${ingredient.food_name} thumbnail`}
       />
@@ -54,9 +54,10 @@ const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
             type="number"
             value={ingredient.selectedQty}
             onChange={(e) => handleUpdateQty(e)}
-            className="w-12"
+            className="w-12 rounded-full"
           />
           <select
+            className="rounded-full"
             name="selectedUnit"
             value={ingredient.selectedUnit}
             onChange={(e) => handleUpdateUnit(e)}
@@ -68,9 +69,9 @@ const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
             ))}
           </select>
         </div>
-        <p className="text-gray-600 text-sm">
-          <span className="font-bold">Calories:</span>{" "}
+        <p className="text-gray-600 text-sm flex items-center gap-2 mb-4">
           {numberFormatter.format(ingredient.nf_calories * ratio)}
+          <span className="font-bold">Cal</span>
         </p>
         {showMore && (
           <>
@@ -123,7 +124,13 @@ const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
             )}
           </>
         )}
-        <button onClick={() => setShowMore((preVal) => !preVal)}>...</button>
+        <button onClick={() => setShowMore((preVal) => !preVal)}>
+          {showMore ? (
+            <span className="material-symbols-outlined">expand_less</span>
+          ) : (
+            <span> Learn More</span>
+          )}
+        </button>
       </div>
       <button
         onClick={() => removeIngredient(ingredient)}

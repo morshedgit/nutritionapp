@@ -25,7 +25,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
         className="h-28 w-full unset-all flex items-center"
       >
         <img
-          className="w-24 h-24 object-cover rounded-lg"
+          className="w-24 h-24 object-cover rounded-full"
           src={ingredientSummary.photo.thumb}
           alt={`${ingredientSummary.food_name} thumbnail`}
         />
