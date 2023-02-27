@@ -75,7 +75,7 @@ const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
             {ingredient.food_name}
           </h3>
         </div>
-        <div className="text-gray-600 text-sm mb-2 flex gap-2">
+        <div className="text-gray-600 text-sm mb-2 w-[inherit] flex gap-2">
           <input
             name="selectedQty"
             min={0}
