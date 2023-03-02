@@ -3,6 +3,7 @@ import IntroContent from "./IntroContent";
 import { IngredientContext } from "./IngredientProvider";
 import Ingredients from "./Ingredients";
 import NutrientsDisplay from "./NutrientsDisplay";
+import useSearchModifiers from "../hooks/useSearchModifiers";
 
 /**
  * A functional React component that displays a meal's nutrients and ingredients using the NutrientsDisplay and Ingredients components, respectively.
@@ -22,8 +23,23 @@ type MealProps = {};
 const Meal: React.FC<MealProps> = (props) => {
   const { totalMealNutrientCount, ingredients } = useContext(IngredientContext);
 
+  const { title, addTitle, removeTitle } = useSearchModifiers();
+
   return (
     <>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const form = e.currentTarget;
+          const formData = new FormData(form);
+          const { title } = Object.fromEntries(formData.entries());
+
+          if (!title) return;
+          addTitle?.(title as string);
+        }}
+      >
+        <input name="title" placeholder="title" defaultValue={title} />
+      </form>
       {ingredients.length === 0 && <IntroContent />}
       {ingredients.length > 0 && (
         <div className="w-full pt-10">
