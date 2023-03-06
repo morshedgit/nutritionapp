@@ -1,23 +1,13 @@
-import React, { createContext, ReactNode, useEffect, useRef } from "react";
-import { Ingredient, IngredientSummary, Meal, Nutrients } from "../types";
+import React, { createContext, ReactNode } from "react";
+import { Ingredient, IngredientSummary, Nutrients } from "../types";
 import useIngredients from "../hooks/useIngredients";
-import useSearchParams from "../hooks/useSearchParams";
-import { useMealStore } from "../hooks/useMealStore";
 
 type IngredientContextProps = {
-  paramsString: string;
-  title?: string;
-  updateTitle: (title: string) => void;
   ingredients: Ingredient[];
   removeIngredient: (ingredient: Ingredient) => void;
   updateIngredient: (ingredient: Ingredient) => void;
   addIngredients: (ingredientSummaries: IngredientSummary[]) => void;
-  onResetMeal: () => void;
   totalMealNutrientCount: Nutrients;
-  meals: Meal[];
-  addMeal: (meal: Meal) => void;
-  removeMeal: (title: string) => void;
-  updateMeal: (meal: Meal) => void;
 };
 /**
  * Context object for managing ingredients and their nutrient data
@@ -30,14 +20,10 @@ type IngredientContextProps = {
  */
 
 export const IngredientContext = createContext<IngredientContextProps>({
-  paramsString: "",
-  title: "",
-  updateTitle: () => {},
   ingredients: [],
   removeIngredient: () => {},
   updateIngredient: () => {},
   addIngredients: () => {},
-  onResetMeal: () => {},
   totalMealNutrientCount: {
     nf_calories: 0,
     nf_total_fat: 0,
@@ -50,10 +36,6 @@ export const IngredientContext = createContext<IngredientContextProps>({
     nf_protein: 0,
     nf_potassium: 0,
   },
-  meals: [],
-  addMeal: () => {},
-  removeMeal: () => {},
-  updateMeal: () => {},
 });
 
 /**
@@ -74,71 +56,21 @@ type IngredientProviderProps = {
 
 const IngredientProvider: React.FC<IngredientProviderProps> = (props) => {
   const {
-    paramsString,
-    ingredients: initialIngredients,
-    onUpdateIngredients,
-    title,
-    onUpdateTitle,
-  } = useSearchParams();
-
-  const {
-    initializing,
     ingredients,
     removeIngredient,
     updateIngredient,
     addIngredients,
-    resetIngredients,
     totalMealNutrientCount,
-  } = useIngredients(initialIngredients);
-
-  const { meals, addMeal, removeMeal, updateMeal } = useMealStore();
-  /**
-   * Function to handle resetting the current meal by resetting the ingredients array and updating the title.
-   */
-  const handleResetMeal = () => {
-    onUpdateTitle("");
-    resetIngredients();
-  };
-  /**
-   * A ref object to keep track of the old title when it changes.
-   * @type {React.MutableRefObject<string>}
-   */
-  const oldTitleRef = useRef(title);
-  /**
-   * Effect hook to update the meals array when the title changes.
-   */
-  useEffect(() => {
-    if (oldTitleRef.current) {
-      removeMeal(oldTitleRef.current);
-    }
-    addMeal({ title, path: paramsString });
-    oldTitleRef.current = title;
-  }, [title]);
-
-  /**
-   * Effect hook to update the url search params when they change.
-   */
-  useEffect(() => {
-    if (initializing) return;
-    onUpdateIngredients(ingredients);
-  }, [ingredients]);
+  } = useIngredients();
 
   return (
     <IngredientContext.Provider
       value={{
-        paramsString,
-        title,
-        updateTitle: onUpdateTitle,
         ingredients,
         removeIngredient,
         updateIngredient,
         addIngredients,
-        onResetMeal: handleResetMeal,
         totalMealNutrientCount,
-        meals,
-        addMeal,
-        removeMeal,
-        updateMeal,
       }}
     >
       {props.children}

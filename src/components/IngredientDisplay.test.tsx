@@ -1,10 +1,10 @@
 import { vi } from "vitest";
 import { fireEvent, render } from "@testing-library/react";
 
-import { Ingredient } from "../../types";
+import { Ingredient } from "../types";
 import IngredientDisplay from "./IngredientDisplay";
 import "@testing-library/jest-dom";
-import { IngredientContext } from "../../components/IngredientProvider";
+import { IngredientContext } from "./IngredientProvider";
 
 const ingredient: Ingredient = {
   food_name: "Almonds",
@@ -87,8 +87,8 @@ const ingredient: Ingredient = {
     highres: "https://d2xdmhkmkbyw75.cloudfront.net/267_highres.jpg",
     is_user_uploaded: false,
   },
-  selected_qty: 1,
-  selected_unit: "oz",
+  selectedQty: 1,
+  selectedUnit: "oz",
 };
 
 describe("IngredientDisplay component", () => {

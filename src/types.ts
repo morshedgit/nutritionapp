@@ -44,8 +44,8 @@ export type Ingredient = {
   alt_measures: Serving[];
   photo: Photo;
 } & {
-  selected_qty: number;
-  selected_unit: string;
+  selectedQty: number;
+  selectedUnit: string;
 };
 
 export type Nutrients = {
@@ -78,9 +78,4 @@ export type IngredientShort = {
   food_name: string;
   selected_qty: number;
   selected_unit: string;
-};
-
-export type Meal = {
-  title: string;
-  path: string;
 };
