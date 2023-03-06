@@ -76,8 +76,8 @@ const ingredients: Ingredient[] = [
         "https://d1r9wva3zcpswd.cloudfront.net/55ca585dddc488c32d7b1f2b.jpeg",
       is_user_uploaded: false,
     },
-    selectedQty: 2,
-    selectedUnit: "cup chopped",
+    selected_qty: 2,
+    selected_unit: "cup chopped",
     full_nutrients: [],
   },
   {
@@ -177,8 +177,8 @@ const ingredients: Ingredient[] = [
       highres: "https://d2xdmhkmkbyw75.cloudfront.net/489_highres.jpg",
       is_user_uploaded: false,
     },
-    selectedQty: 2,
-    selectedUnit: 'medium (7" to 7-7/8" long)',
+    selected_qty: 2,
+    selected_unit: 'medium (7" to 7-7/8" long)',
     full_nutrients: [],
   },
 ];

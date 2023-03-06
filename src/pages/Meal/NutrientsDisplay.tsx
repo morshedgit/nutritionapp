@@ -1,6 +1,6 @@
 import React from "react";
-import { numberFormatter } from "../common/util";
-import { Nutrients } from "../types";
+import { numberFormatter } from "../../common/util";
+import { Nutrients } from "../../types";
 
 type Props = {
   nutrients: Nutrients;

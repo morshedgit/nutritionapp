@@ -1,4 +1,5 @@
 import { IngredientSummary } from "../types";
+import Icon from "./Icon";
 
 type SelectedResultsProps = {
   selectedIngredientSummaries: IngredientSummary[];
@@ -44,9 +45,7 @@ const SelectedResults: React.FC<SelectedResultsProps> = ({
                 alt={`${ingredientSummary.food_name} thumbnail`}
               />
               <div className="absolute w-24 h-24 top-0 left-0 text-5xl rounded-full hidden group-hover:grid group-hover:place-content-center">
-                <span className="material-symbols-outlined text-red-500 text-5xl">
-                  close
-                </span>
+                <Icon title="close" className="text-red-500 text-5xl" />
               </div>
             </button>
           </li>
