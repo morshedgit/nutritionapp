@@ -1,5 +1,4 @@
 import { IngredientSummary } from "../types";
-import Icon from "./Icon";
 
 type SearchResultItemProps = {
   ingredientSummary: IngredientSummary;
@@ -51,10 +50,9 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
         </div>
         {isSelected && (
           <div className="h-full flex flex-col justify-center">
-            <Icon
-              title="check"
-              className="bg-green-500 text-white rounded-full aspect-square"
-            />
+            <span className="material-symbols-outlined w-6 h-6 bg-green-500 text-white rounded-full">
+              check
+            </span>
           </div>
         )}
       </button>

@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import useSearch from "../hooks/useSearch";
 import { IngredientSummary } from "../types";
-import Icon from "./Icon";
 import { IngredientContext } from "./IngredientProvider";
 import SearchResult from "./SearchResult";
 
@@ -46,15 +45,19 @@ const Search: React.FC<SearchProps> = (props) => {
         />
         <span className="absolute left-0 top-0 flex items-center pl-3 h-full">
           {searching ? (
-            <Icon title="autorenew" className="animate-spin infinite" />
+            <span className="material-symbols-outlined animate-spin infinite">
+              autorenew
+            </span>
           ) : (
-            <Icon title="search_check" />
+            <span className="material-symbols-outlined">search_check</span>
           )}
         </span>
       </div>
       {error && (
         <div className="absolute top-12 min-w-sm bg-white shadow-lg rounded-lg flex items-center p-4 gap-4">
-          <Icon title="warning" className="text-red-500 text-3xl" />
+          <span className="material-symbols-outlined text-red-500 text-3xl">
+            warning
+          </span>
           <div className="text-sm">
             <h3 className="font-bold">Something went wrong!</h3>
             <p>Please try again...</p>

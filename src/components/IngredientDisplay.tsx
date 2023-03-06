@@ -1,8 +1,7 @@
 import { useContext, useMemo, useState } from "react";
-import { numberFormatter } from "../../common/util";
-import { Ingredient } from "../../types";
-import Icon from "../../components/Icon";
-import { IngredientContext } from "../../components/IngredientProvider";
+import { numberFormatter } from "../common/util";
+import { Ingredient } from "../types";
+import { IngredientContext } from "./IngredientProvider";
 
 /**
  * IngredientProps is an interface for the props passed to the IngredientDisplay component
@@ -28,14 +27,13 @@ const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
    */
   const ratio = useMemo(() => {
     const measure = ingredient.alt_measures.find(
-      (measure) => measure.measure === ingredient.selected_unit
+      (measure) => measure.measure === ingredient.selectedUnit
     );
     if (!measure) return 1;
 
     const servingPerQty = measure.serving_weight / measure.qty;
     return (
-      (ingredient.selected_qty * servingPerQty) /
-      ingredient.serving_weight_grams
+      (ingredient.selectedQty * servingPerQty) / ingredient.serving_weight_grams
     );
   }, [ingredient]);
 
@@ -79,17 +77,17 @@ const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
         </div>
         <div className="text-gray-600 text-sm mb-2 w-[inherit] flex gap-2">
           <input
-            name="selected_qty"
+            name="selectedQty"
             min={0}
             type="number"
-            value={ingredient.selected_qty}
+            value={ingredient.selectedQty}
             onChange={(e) => handleUpdateQty(e)}
             className="w-12 rounded-full"
           />
           <select
             className="rounded-full"
-            name="selected_unit"
-            value={ingredient.selected_unit}
+            name="selectedUnit"
+            value={ingredient.selectedUnit}
             onChange={(e) => handleUpdateUnit(e)}
           >
             {ingredient.alt_measures.map((measure) => (
@@ -155,14 +153,18 @@ const IngredientDispay: React.FC<IngredientProps> = ({ ingredient }) => {
           </>
         )}
         <button onClick={() => setShowMore((preVal) => !preVal)}>
-          {showMore ? <Icon title="expand_less" /> : <span> Learn More</span>}
+          {showMore ? (
+            <span className="material-symbols-outlined">expand_less</span>
+          ) : (
+            <span> Learn More</span>
+          )}
         </button>
       </div>
       <button
         onClick={() => removeIngredient(ingredient)}
-        className="p-4 hover:text-red-500 active:text-red-700"
+        className="hover:text-red-500 active:text-red-700"
       >
-        <Icon title="delete" />
+        <span className="material-symbols-outlined px-6">delete</span>
       </button>
     </li>
   );

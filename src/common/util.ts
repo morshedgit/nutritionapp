@@ -27,13 +27,13 @@ export const getTotalNutrientCount = (ingredients: Ingredient[]) => {
       const keys = Object.keys(total) as Array<keyof Nutrients>;
       keys.forEach((nutrient) => {
         const measure = cur.alt_measures.find(
-          (measure) => measure.measure === cur.selected_unit
+          (measure) => measure.measure === cur.selectedUnit
         );
         if (!measure) return total;
 
         const servingPerQty = measure.serving_weight / measure.qty;
         const ratio =
-          (cur.selected_qty * servingPerQty) / cur.serving_weight_grams;
+          (cur.selectedQty * servingPerQty) / cur.serving_weight_grams;
         return (total[nutrient] += cur[nutrient] * ratio);
       });
       return total;
@@ -53,75 +53,3 @@ export const getTotalNutrientCount = (ingredients: Ingredient[]) => {
   );
   return totalNutrients;
 };
-
-/**
- * A class that provides caching functionality using the browser's localStorage API.
- * @class
- */
-export class LocalCache {
-  storeKey: string;
-  /**
-   * @constructor
-   * @param {string} key - The key to be used for storing items in the cache.
-   */
-  constructor(key: string) {
-    this.storeKey = key;
-  }
-
-  /**
-   * Adds an item to the cache.
-   * @template T
-   * @param {string} key - The key to be used for storing the item in the cache.
-   * @param {T} value - The value to be stored in the cache.
-   */
-  setItem<T>(key: string, value: T) {
-    let storeString = localStorage.getItem(this.storeKey);
-    if (!storeString) {
-      const defaultStoreValue = JSON.stringify({});
-      localStorage.setItem(this.storeKey, defaultStoreValue);
-      storeString = defaultStoreValue;
-    }
-    const store: { [key: string]: T } = JSON.parse(storeString);
-    store[key] = value;
-    localStorage.setItem(this.storeKey, JSON.stringify(store));
-  }
-
-  /**
-   * Retrieves an item from the cache.
-   * @template T
-   * @param {string} key - The key used to store the item in the cache.
-   * @returns {T|undefined} The cached item, or undefined if the key is not found in the cache.
-   */
-  getItem<T>(key: string) {
-    let storeString = localStorage.getItem(this.storeKey);
-    if (!storeString) return;
-    const store: { [key: string]: T } = JSON.parse(storeString);
-    const value = store[key];
-    if (!value) return;
-    return value;
-  }
-  /**
-   * Retrieves all items from the cache.
-   * @template T
-   * @returns {T|undefined} The cached item, or undefined if the key is not found in the cache.
-   */
-  getAll<T>() {
-    let storeString = localStorage.getItem(this.storeKey);
-    if (!storeString) return;
-    const store: { [key: string]: T } = JSON.parse(storeString);
-    return store;
-  }
-  /**
-   * Removes an item from the cache.
-   * @template T
-   * @param {string} key - The key used to store the item in the cache.
-   * @returns {T|undefined} The cached item, or undefined if the key is not found in the cache.
-   */
-  removeItem<T>(key: string) {
-    let storeString = localStorage.getItem(this.storeKey);
-    if (!storeString) return;
-    const store: { [key: string]: T } = JSON.parse(storeString);
-    delete store[key];
-    localStorage.setItem(this.storeKey, JSON.stringify(store));
-  }
-}

@@ -1,7 +1,54 @@
-import { LocalCache } from "../common/util";
 import { Ingredient } from "../types";
 
-const ingredientCache = new LocalCache("ingredientCache");
+/**
+ * A class that provides caching functionality using the browser's localStorage API.
+ * @class
+ */
+class Cache {
+  storeKey: string;
+  /**
+   * @constructor
+   * @param {string} key - The key to be used for storing items in the cache.
+   */
+  constructor(key: string) {
+    this.storeKey = key;
+  }
+
+  /**
+   * Adds an item to the cache.
+   * @template T
+   * @param {string} key - The key to be used for storing the item in the cache.
+   * @param {T} value - The value to be stored in the cache.
+   */
+  setItem<T>(key: string, value: T) {
+    let storeString = localStorage.getItem(this.storeKey);
+    if (!storeString) {
+      const defaultStoreValue = JSON.stringify({});
+      localStorage.setItem(this.storeKey, defaultStoreValue);
+      storeString = defaultStoreValue;
+    }
+    const store: { [key: string]: T } = JSON.parse(storeString);
+    store[key] = value;
+    localStorage.setItem(this.storeKey, JSON.stringify(store));
+  }
+
+  /**
+   * Retrieves an item from the cache.
+   * @template T
+   * @param {string} key - The key used to store the item in the cache.
+   * @returns {T|undefined} The cached item, or undefined if the key is not found in the cache.
+   */
+  getItem<T>(key: string) {
+    let storeString = localStorage.getItem(this.storeKey);
+    if (!storeString) return;
+    const store: { [key: string]: T } = JSON.parse(storeString);
+    const value = store[key];
+    if (!value) return;
+    return value;
+  }
+}
+
+const ingredientCache = new Cache("ingredientCache");
 
 /**
  * Retrieves detailed nutritional information for a given ingredient summary.
@@ -17,8 +64,8 @@ export const getIngredient = async <T extends { food_name: string }>(
     ingredientSummary.food_name
   );
   if (ingredient) {
-    ingredient.selected_qty = ingredient.serving_qty;
-    ingredient.selected_unit = ingredient.serving_unit;
+    ingredient.selectedQty = ingredient.serving_qty;
+    ingredient.selectedUnit = ingredient.serving_unit;
     return ingredient;
   }
   const body = JSON.stringify({
@@ -44,8 +91,8 @@ export const getIngredient = async <T extends { food_name: string }>(
   ) as Ingredient;
   if (!ingredient) return;
   ingredientCache.setItem(ingredient.food_name, ingredient);
-  ingredient.selected_qty = ingredient.serving_qty;
-  ingredient.selected_unit = ingredient.serving_unit;
+  ingredient.selectedQty = ingredient.serving_qty;
+  ingredient.selectedUnit = ingredient.serving_unit;
   return ingredient;
 };
 
