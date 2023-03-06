@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import IngredientDispay from "./IngredientDisplay";
-import { IngredientContext } from "./IngredientProvider";
+import { IngredientContext } from "../../components/IngredientProvider";
 
 type IngredientsProps = {
   className?: string;

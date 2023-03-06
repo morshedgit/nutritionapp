@@ -1,38 +1,43 @@
 import React, { useState } from "react";
+import { Link, Outlet } from "react-router-dom";
+import Icon from "../components/Icon";
 import Logo from "../components/Logo";
 import Search from "../components/Search";
+import { useMealStore } from "../hooks/useMealStore";
 
 const sideMenuItems: {
   icon: string;
   title: string;
+  path: string;
 }[] = [
   {
     icon: "favorite",
-    title: "Your Favorite",
+    title: "Favorites",
+    path: "favorite",
   },
   {
     icon: "restaurant_menu",
-    title: "Your Recipes",
+    title: "My Meals",
+    path: "my-meals",
   },
   {
     icon: "tab_recent",
     title: "Recent Meals",
+    path: "recent",
   },
   {
     icon: "settings",
     title: "Setting",
+    path: "setting",
   },
   {
     icon: "help",
     title: "Help",
+    path: "help",
   },
 ];
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
@@ -44,17 +49,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           className="px-4 p-2 hover:bg-green-500 active:bg-green-600"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
-          <span className="material-symbols-outlined text-4xl">menu</span>
+          <Icon title="menu" className="text-4xl" />
         </button>
-        <h2 className="flex items-center gap-4">
-          <p className="text-2xl">
-            <Logo />
-          </p>
-          <span className="text-2xl">
-            <b className="text-orange-600">H</b>appy
-            <b className="text-orange-600">M</b>eal
-          </span>
-        </h2>
+        <a href="/">
+          <h2 className="flex items-center gap-4">
+            <p className="text-2xl">
+              <Logo />
+            </p>
+            <span className="text-2xl">
+              <b className="text-orange-600">H</b>appy
+              <b className="text-orange-600">M</b>eal
+            </span>
+          </h2>
+        </a>
         <Search />
         <div className="w-fit pr-4">
           <a href="#">Login / Sign Up</a>
@@ -74,12 +81,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   key={item.icon}
                   className="hover:text-xl hover:text-orange-500"
                 >
-                  <button className="flex items-center gap-2 ">
-                    <span className="material-symbols-outlined">
-                      {item.icon}
-                    </span>
+                  <Link to={item.path} className="flex items-center gap-2 ">
+                    <Icon title={item.icon} />
                     <p>{item.title}</p>
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -87,7 +92,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </aside>
 
         {/* Main Area */}
-        <main className="flex-grow bg-gray-100 p-4">{children}</main>
+        <main className="flex-grow bg-gray-100 p-4">
+          <Outlet />
+        </main>
       </div>
     </div>
   );
